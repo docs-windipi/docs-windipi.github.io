@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Docs · Windipi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafc;
+      color: #1e1e2f;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; width: 100%; }
+
+    /* header */
+    .header {
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+      flex-shrink: 0;
+    }
+    .nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; }
+    .logo { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.02em; color: #0b2b40; text-decoration: none; }
+    .logo span { color: #2d7a9b; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: #2d3e50; font-weight: 500; font-size: 1rem; transition: color 0.2s; position: relative; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -6px; left: 0; width: 0; height: 2px; background-color: #2d7a9b; transition: width 0.25s ease; }
+    .nav-links a:hover { color: #1e6f8f; }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-links a.active { color: #1e6f8f; }
+    .nav-links a.active::after { width: 100%; }
+    .mobile-toggle { display: none; font-size: 1.8rem; background: none; border: none; color: #0b2b40; cursor: pointer; }
+
+    /* docs layout */
+    .docs-wrap {
+      flex: 1;
+      display: flex;
+      gap: 50px;
+      padding: 50px 0 80px;
+      align-items: flex-start;
+    }
+
+    /* sidebar */
+    .sidebar {
+      width: 250px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 100px;
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 30px 22px;
+      border: 1px solid #ecf3f8;
+      box-shadow: 0 20px 40px -30px rgba(0, 40, 60, 0.2);
+    }
+    .sidebar h4 {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #1e6f8f;
+      margin-bottom: 14px;
+      margin-top: 26px;
+    }
+    .sidebar h4:first-child { margin-top: 0; }
+    .sidebar ul { list-style: none; }
+    .sidebar li { margin-bottom: 4px; }
+    .sidebar a {
+      display: block;
+      text-decoration: none;
+      color: #4e6475;
+      font-size: 0.92rem;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 10px;
+      transition: all 0.15s;
+    }
+    .sidebar a:hover { background: #eef6fb; color: #1e6f8f; }
+    .sidebar a.active { background: #e1f0f7; color: #1e6f8f; font-weight: 600; }
+    .sidebar .side-note {
+      margin-top: 22px;
+      padding: 14px 16px;
+      background: #f0f8fc;
+      border-left: 3px solid #1e6f8f;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      color: #2d4d60;
+      line-height: 1.5;
+    }
+    .sidebar .side-note strong { color: #0b2b40; }
+
+    /* content */
+    .doc-content {
+      flex: 1;
+      min-width: 0;
+      background: #ffffff;
+      border-radius: 42px;
+      padding: 55px 55px 65px;
+      border: 1px solid #ecf3f8;
+      box-shadow: 0 30px 50px -40px rgba(0, 40, 60, 0.15);
+    }
+    .doc-badge {
+      display: inline-block;
+      background: #e1f0f7;
+      color: #1e6f8f;
+      font-weight: 600;
+      font-size: 0.75rem;
+      padding: 5px 16px;
+      border-radius: 40px;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .doc-content h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #0b2b40;
+      margin-bottom: 16px;
+      line-height: 1.15;
+    }
+    .doc-lead {
+      font-size: 1.1rem;
+      color: #5a6f7e;
+      margin-bottom: 40px;
+      max-width: 620px;
+    }
+    .doc-content section { margin-bottom: 55px; scroll-margin-top: 100px; }
+    .doc-content section:last-child { margin-bottom: 0; }
+    .doc-content h2 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #0b2b40;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #ecf3f8;
+    }
+    .doc-content h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #0b2b40;
+      margin: 28px 0 10px;
+    }
+    .doc-content p { color: #4e6475; margin-bottom: 16px; }
+    .doc-content a { color: #1e6f8f; text-decoration: none; font-weight: 500; }
+    .doc-content a:hover { text-decoration: underline; }
+
+    .doc-list { list-style: none; margin: 14px 0 20px; }
+    .doc-list li {
+      display: flex; align-items: flex-start; gap: 12px;
+      margin-bottom: 12px; color: #4e6475; font-size: 0.98rem;
+    }
+    .doc-list i { color: #1e6f8f; font-size: 0.95rem; margin-top: 5px; flex-shrink: 0; }
+
+    .info-box {
+      background: #f0f8fc;
+      border-left: 4px solid #1e6f8f;
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin: 22px 0;
+    }
+    .info-box p { margin-bottom: 0; color: #2d4d60; font-size: 0.95rem; }
+    .info-box strong { color: #0b2b40; }
+
+    .note-box {
+      background: #fff8e8;
+      border-left: 4px solid #d9a441;
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin: 22px 0;
+    }
+    .note-box p { margin-bottom: 0; color: #6b5020; font-size: 0.95rem; }
+    .note-box strong { color: #4d380f; }
+
+    /* api card in docs */
+    .api-card {
+      background: #f9fafc;
+      border-radius: 28px;
+      padding: 34px 30px;
+      border: 1px solid #ecf3f8;
+      transition: all 0.25s;
+    }
+    .api-card:hover {
+      border-color: #c7dfeb;
+      box-shadow: 0 20px 40px -25px rgba(0, 60, 90, 0.2);
+    }
+    .api-card .api-icon {
+      width: 60px; height: 60px;
+      background: #e3f0f7; border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 22px;
+    }
+    .api-card .api-icon i { font-size: 1.8rem; color: #1e6f8f; }
+    .api-card h3 { font-size: 1.4rem; font-weight: 700; color: #0b2b40; margin-bottom: 10px; }
+    .api-card p { color: #4e6475; font-size: 0.98rem; margin-bottom: 18px; }
+    .api-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+    .api-badge {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px;
+      text-transform: uppercase; padding: 4px 10px; border-radius: 20px;
+    }
+    .api-badge.tester { color: #1e5c38; background: #eaf6ef; }
+    .api-badge.unstable { color: #8f2f1e; background: #fbe4e0; }
+    .api-card .api-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: #1e6f8f; font-weight: 600; font-size: 0.95rem;
+      text-decoration: none;
+    }
+    .api-card .api-link:hover { text-decoration: underline; }
+    .api-card .api-link i { font-size: 0.8rem; }
+
+    /* footer */
+    .footer { background: #0a1e2b; color: #b8cedb; padding: 50px 0 30px; flex-shrink: 0; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-brand h3 { font-size: 1.8rem; font-weight: 700; color: white; margin-bottom: 16px; }
+    .footer-brand h3 span { color: #6baed3; }
+    .footer-brand p { max-width: 300px; font-size: 0.95rem; line-height: 1.7; }
+    .footer-col h4 { color: white; font-weight: 600; margin-bottom: 20px; font-size: 1.05rem; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 12px; }
+    .footer-col a { color: #b8cedb; text-decoration: none; transition: color 0.2s; font-size: 0.95rem; }
+    .footer-col a:hover { color: white; }
+    .footer-email { color: #8fb4c9; font-style: italic; font-size: 0.95rem; }
+    .footer-bottom {
+      border-top: 1px solid #1d3b4b; padding-top: 28px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 16px; font-size: 0.9rem;
+    }
+    .social-links { display: flex; gap: 20px; }
+    .social-links a { color: #b8cedb; font-size: 1.2rem; transition: color 0.2s; }
+    .social-links a:hover { color: white; }
+
+    /* responsive */
+    @media (max-width: 900px) {
+      .docs-wrap { flex-direction: column; gap: 30px; padding: 30px 0 60px; }
+      .sidebar {
+        width: 100%; position: static; padding: 24px 22px;
+        display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px;
+      }
+      .sidebar h4 { margin-top: 18px; }
+      .sidebar h4:first-child { margin-top: 0; }
+      .sidebar .side-note { grid-column: 1 / -1; }
+      .doc-content { padding: 40px 30px 50px; }
+      .doc-content h1 { font-size: 2.1rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+      .mobile-toggle { display: block; }
+      .nav-links.active {
+        display: flex; flex-direction: column; position: absolute;
+        top: 80px; left: 0; width: 100%; background: white;
+        padding: 30px 24px; box-shadow: 0 20px 30px rgba(0, 0, 0, 0.08);
+        gap: 24px; border-radius: 0 0 30px 30px; z-index: 99;
+      }
+    }
+    @media (max-width: 600px) {
+      .sidebar { grid-template-columns: 1fr; }
+      .doc-content { padding: 32px 22px 40px; border-radius: 30px; }
+      .doc-content h1 { font-size: 1.8rem; }
+      .doc-content h2 { font-size: 1.4rem; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="container">
+      <nav class="nav">
+        <a href="/" class="logo">Windi<span>pi</span></a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="/#product">WindPipeDB</a></li>
+          <li><a href="/#about">About</a></li>
+          <li><a href="/docs" class="active">Docs</a></li>
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- DOCS -->
+  <main class="container docs-wrap">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <h4>Getting started</h4>
+      <ul>
+        <li><a href="#overview" class="active">Overview</a></li>
+        <li><a href="#about-windipi">About Windipi</a></li>
+      </ul>
+      <h4>WindPipeDB</h4>
+      <ul>
+        <li><a href="#windpipedb">What is WindPipeDB?</a></li>
+        <li><a href="#availability">Availability</a></li>
+      </ul>
+      <h4>WindPipeDB API</h4>
+      <ul>
+        <li><a href="/docs/windpipedbapi">API reference →</a></li>
+      </ul>
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#status">Status &amp; availability</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="side-note">
+        <strong>Testers only:</strong> The WindPipeDB API is available to Windipi testers. It's not public, and some features may not work.
+      </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <article class="doc-content">
+      <span class="doc-badge"><i class="fas fa-book-open" style="margin-right:6px;"></i> Documentation</span>
+      <h1>Windipi docs</h1>
+      <p class="doc-lead">Everything you need to know about Windipi and WindPipeDB. We're just getting started, so these docs will grow over time.</p>
+
+      <!-- Overview -->
+      <section id="overview">
+        <h2>Overview</h2>
+        <p>Windipi is a versatile company that builds its own products. This documentation covers the company itself and our first product, <strong>WindPipeDB</strong>.</p>
+        <p>Use the sidebar to jump to a section, or start with the quick links below.</p>
+        <ul class="doc-list">
+          <li><i class="fas fa-arrow-right"></i> New here? Start with <a href="#about-windipi">About Windipi</a>.</li>
+          <li><i class="fas fa-arrow-right"></i> Looking for the product? See <a href="#windpipedb">What is WindPipeDB?</a></li>
+          <li><i class="fas fa-arrow-right"></i> Looking for the API? See the <a href="#api">WindPipeDB API</a>.</li>
+          <li><i class="fas fa-arrow-right"></i> Need to reach us? Check <a href="#contact">Contact</a>.</li>
+        </ul>
+      </section>
+
+      <!-- About Windipi -->
+      <section id="about-windipi">
+        <h2>About Windipi</h2>
+        <p>Windipi is a new, versatile company. We build our own products and stay flexible in how we work — no rigid packages, no bloated legacy. Our focus is on building things that last and keeping communication direct and honest.</p>
+        <h3>What we're working on</h3>
+        <ul class="doc-list">
+          <li><i class="fas fa-check-circle"></i> <strong>WindPipeDB</strong> — our database product (see below).</li>
+          <li><i class="fas fa-check-circle"></i> <strong>WindPipeDB API</strong> — available to testers (see below).</li>
+          <li><i class="fas fa-check-circle"></i> More products to come as we grow.</li>
+        </ul>
+        <div class="info-box">
+          <p><strong>Just getting started.</strong> Windipi is a young company, so some things are still being set up. This page will be updated as more becomes available.</p>
+        </div>
+      </section>
+
+      <!-- WindPipeDB -->
+      <section id="windpipedb">
+        <h2>What is WindPipeDB?</h2>
+        <p><strong>WindPipeDB</strong> is Windipi's database product — the first of what we build. It's designed to be practical, adaptable, and ready to fit into the way you already work.</p>
+        <h3>Key characteristics</h3>
+        <ul class="doc-list">
+          <li><i class="fas fa-database"></i> Built and maintained by Windipi.</li>
+          <li><i class="fas fa-expand-arrows-alt"></i> Flexible enough to grow with your project.</li>
+          <li><i class="fas fa-feather"></i> Straightforward to set up and use.</li>
+          <li><i class="fas fa-headset"></i> Direct support from the team who made it.</li>
+        </ul>
+        <div class="note-box">
+          <p><strong>Note:</strong> WindPipeDB is still in development. It is not yet available to download, install, or use.</p>
+        </div>
+      </section>
+
+      <!-- Availability -->
+      <section id="availability">
+        <h2>Availability</h2>
+        <p>WindPipeDB isn't released yet. You cannot create a database, install it, or use it at this time — it's still being built.</p>
+        <p>When it's ready, this page will be the first place updated with details on how to get started.</p>
+        <div class="info-box">
+          <p><strong>Not available yet.</strong> There's no download, no install, and no sign-up. Check back later for the first release.</p>
+        </div>
+      </section>
+
+      <!-- WindPipeDB API (in docs) -->
+      <section id="api">
+        <h2>WindPipeDB API</h2>
+        <p>The WindPipeDB API lets you interact with databases programmatically — creating them, reading and writing records, and managing access.</p>
+        <p>It's currently available to <strong>Windipi testers</strong> for testing and early usage. Public access is not available yet.</p>
+
+        <div class="api-card">
+          <div class="api-icon"><i class="fas fa-plug"></i></div>
+          <h3>WindPipeDB API</h3>
+          <div class="api-badges">
+            <span class="api-badge tester">Testers only</span>
+            <span class="api-badge unstable">Some features may not work</span>
+          </div>
+          <p>The API is live and available to Windipi testers. Access is by invitation only — there's no public sign-up, and the API is not publicly reachable. Because it's still evolving, some features may not work as expected.</p>
+          <a href="/docs/windpipedbapi" class="api-link">Read the full API reference <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <div class="note-box">
+          <p><strong>Not a tester?</strong> Public access is coming later. Until then, the <a href="/docs/windpipedbapi">API reference</a> is for testers and general reference.</p>
+        </div>
+      </section>
+
+      <!-- Status -->
+      <section id="status">
+        <h2>Status &amp; availability</h2>
+        <p>Windipi and WindPipeDB are just getting started. Here's the current state:</p>
+        <ul class="doc-list">
+          <li><i class="fas fa-hourglass-half"></i> <strong>Windipi:</strong> company active, building products.</li>
+          <li><i class="fas fa-code"></i> <strong>WindPipeDB:</strong> in development — not yet usable.</li>
+          <li><i class="fas fa-plug"></i> <strong>WindPipeDB API:</strong> available to testers — not public, some features may not work.</li>
+          <li><i class="fas fa-envelope"></i> <strong>Email:</strong> not yet set up — check back soon.</li>
+        </ul>
+        <div class="note-box">
+          <p><strong>Email is currently unavailable.</strong> We're in the process of setting it up. Once it's live, contact details will appear here and in the site footer.</p>
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section id="contact">
+        <h2>Contact</h2>
+        <p>We'd be glad to hear from you — but our email isn't set up just yet.</p>
+        <div class="info-box">
+          <p><strong>Email:</strong> [unavailable] — we're working on it. Check back soon, or see the <a href="/#contact">main site</a> for updates.</p>
+        </div>
+        <p>In the meantime, feel free to explore the rest of the site to learn more about Windipi and WindPipeDB.</p>
+        <p><a href="/">← Back to Windipi home</a></p>
+      </section>
+
+    </article>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>Windi<span>pi</span></h3>
+          <p>A versatile company building our own products. We're just getting started — thanks for being here.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/#product">Product</a></li>
+            <li><a href="/#about">About</a></li>
+            <li><a href="/docs">Docs</a></li>
+            <li><a href="/docs/windpipedbapi">WindPipeDB API</a></li>
+            <li><a href="/#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Connect</h4>
+          <ul>
+            <li><span class="footer-email">Email: [unavailable]</span></li>
+            <li><a href="#">LinkedIn</a></li>
+            <li><a href="#">Twitter / X</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year">2026</span> Windipi. All rights reserved.</span>
+        <div class="social-links">
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // mobile menu
+    (function() {
+      const toggle = document.getElementById('mobileToggle');
+      const navLinks = document.getElementById('navLinks');
+
+      if (toggle && navLinks) {
+        toggle.addEventListener('click', function(e) {
+          e.stopPropagation();
+          navLinks.classList.toggle('active');
+          const icon = toggle.querySelector('i');
+          if (navLinks.classList.contains('active')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+          } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+          }
+        });
+
+        navLinks.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            const icon = toggle.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+          });
+        });
+
+        document.addEventListener('click', (e) => {
+          if (navLinks.classList.contains('active') && !navLinks.contains(e.target) && e.target !== toggle && !toggle.contains(e.target)) {
+            navLinks.classList.remove('active');
+            const icon = toggle.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+          }
+        });
+      }
+    })();
+
+    // sidebar active link highlighting
+    (function() {
+      const sidebarLinks = document.querySelectorAll('.sidebar a');
+      const sections = document.querySelectorAll('.doc-content section');
+
+      function setActive(id) {
+        sidebarLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+      }
+
+      sidebarLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          const href = link.getAttribute('href');
+          if (href.startsWith('#')) {
+            const id = href.slice(1);
+            setActive(id);
+          }
+        });
+      });
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id);
+          }
+        });
+      }, { rootMargin: '-100px 0px -60% 0px', threshold: 0 });
+
+      sections.forEach(section => observer.observe(section));
+    })();
+  </script>
+</body>
+</html>
